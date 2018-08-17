@@ -31,31 +31,68 @@ const style = {
 	    fontWeight: '100',
 	    height: 'fit-content',
 	},
-}
+}	
 
-const TopDetails = ({ goingTowards }) =>
-	<div>
-		<div style={style.root}>
-			<div style={style.topDetails}>
-				<div 
-					onClick={this.flipDirection} 
-					style={{...style.label, fontSize: '16px'}}>
-					{goingTowards === 'buckshaw' ? 'OUT' : 'RTN'}
-				</div>
 
-				<div>
-					<div style={style.direction}>
-						<div style={style.time}>{goingTowards === 'buckshaw' ? '07:55' : '17:20'}</div>
-						<div>{goingTowards === 'buckshaw' ? 'Bolton' : 'Buckshaw Parkaway'}</div>
+const outStart = localStorage.getItem('outstart')
+const outEnd = localStorage.getItem('outend')
+
+const rtnStart = localStorage.getItem('rtnstart')
+const rtnEnd = localStorage.getItem('rtnend')
+
+const initOutStart = outStart ? 
+	JSON.parse(outStart) :
+	'07:55' 
+
+const initOutEnd = outEnd ?
+	JSON.parse(outEnd) :
+	'08:21'
+
+const initRtnStart = rtnStart ? 
+	JSON.parse(rtnStart) :
+	'17:20' 
+
+const initRtnEnd = rtnEnd ?
+	JSON.parse(rtnEnd) :
+	'17:41' 
+
+class TopDetails extends React.Component {
+	state = {
+		outStart: initOutStart,
+		outEnd: initOutEnd,
+		rtnStart: initRtnStart,
+		rtnEnd: initRtnEnd
+	}
+
+	render() {
+		const { outStart, outEnd, rtnStart, rtnEnd } = this.state
+		const { from, to, direction } = this.props
+		return(
+			<div>
+				<div style={style.root}>
+					<div style={style.topDetails}>
+						<div 
+							onClick={this.flipDirection} 
+							style={{...style.label, fontSize: '16px'}}>
+							{direction ? 'OUT' : 'RTN'}
+						</div>
+
+						<div>
+							<div style={style.direction}>
+								<div style={style.time}>{direction ? outStart : rtnStart}</div>
+								<div>{direction ? from : to}</div>
+							</div>
+
+							<section style={style.direction}>
+								<div style={style.time}>{direction ? outEnd : rtnEnd}</div>
+								<div>{direction ? to : from }</div>
+							</section>
+						</div>
 					</div>
-
-					<section style={style.direction}>
-						<div style={style.time}>{goingTowards === 'buckshaw' ? '08:21' : '17:41'}</div>
-						<div>{goingTowards === 'buckshaw' ? 'Buckshaw Parkaway' : 'Bolton'}</div>
-					</section>
 				</div>
 			</div>
-		</div>
-	</div>
+		)
+	}
+}
 
 export default TopDetails

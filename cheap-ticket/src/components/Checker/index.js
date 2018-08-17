@@ -1,6 +1,6 @@
 import React from 'react'
 import './index.css'
-import doubleTap from '../util/doubleTap'
+import doubleTap, { doubleTapDynamic } from '../util/doubleTap'
 import { SwatchesPicker } from 'react-color'
 
 const SingleUnit = ({ right, color, ...rest }) => 
@@ -83,7 +83,7 @@ class Checker extends React.Component {
 					<SingleUnit color={colors[1]}/>
 					<SingleUnit 
 						color={colors[2]} 
-						onClick={()=>doubleTap(this.flipColorPicker)}
+						onClick={()=>doubleTapDynamic(this.flipColorPicker)}
 						right
 					/>
 					<div

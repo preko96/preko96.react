@@ -17,13 +17,15 @@ const style = {
 const months = ["Ja", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const days = ["Sun", "Mon", "Tue", "Wednesday", "Thu", "Fri", "Sat"];
 
+const randomTimeBetween = (a, b) => Math.random() * (b - a) + a
+
 const getDate = (bool) => {
 	const date = new Date()
 	const day = days[date.getDay()]
 	const day1 = date.getDate()
 	const month = months[date.getMonth()]
 	const year = date.getFullYear()
-	return `${day} ${day1} ${month} ${year} ${bool ? '7:31' : '06:24'}`
+	return `${day} ${day1} ${month} ${year} ${bool ? '07:31' : '06:24'}`
 }
 
 const BottomDetailsBarcode = props => 

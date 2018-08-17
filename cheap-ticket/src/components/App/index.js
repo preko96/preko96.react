@@ -7,23 +7,40 @@ import QRCode from '../QRCode'
 
 import { BottomDetailsBarcode, BottomDetailsTicket, Header } from '../BottomDetails'
 
+const localFrom = localStorage.getItem('from')
+const localTo = localStorage.getItem('to')
+
+const initFrom = localFrom ? 
+	JSON.parse(localFrom) :
+	'Bolton' 
+
+const initTo = localStorage.getItem('to') ?
+	JSON.parse(localTo) :
+	'Manchester Victoria'
+
 class App extends React.Component {
 
 	state = {
+		from: initFrom,
+		to: initTo,
 		activeTab: 'ticket',
-		goingTowards: 'buckshaw'
+		direction: true,
 	}
 
 	changeTab = tab => this.setState({activeTab: tab})
-	flipGoingTowards = () => this.setState(state=>({goingTowards: state.goingTowards === 'buckshaw' ? 'bolton' : 'buckshaw'}))
+	flipGoingTowards = () => this.setState(state=>({ direction: !state.direction }))
 
 	render() {
-		const { activeTab, goingTowards } = this.state
+		const { activeTab, from, to, direction } = this.state
+		const goingTowards = direction ? 
+			to :
+			from
+
 		return(
 			<div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
 				<div>
 					<Topbar/>
-					<TopDetails goingTowards={goingTowards}/>
+					<TopDetails from={from} to={to} direction={direction}/>
 					<Tabs activeTab={activeTab} changeTab={this.changeTab}/>
 				</div>
 
@@ -43,7 +60,7 @@ class App extends React.Component {
 						<div style={{display: 'flex', justifyContent: 'center'}}>
 							{
 								activeTab === 'ticket' ? 
-								<Card goingTowards={goingTowards} flipGoingTowards={this.flipGoingTowards}/>
+								<Card from={from} to={to} direction={direction} flipGoingTowards={this.flipGoingTowards}/>
 								:
 								<QRCode/>
 							}
@@ -52,9 +69,8 @@ class App extends React.Component {
 						<div style={{display: 'flex', justifyContent: 'center'}}>
 							{
 								activeTab === 'ticket' ? 
-								<BottomDetailsTicket/>
-								:
-								<BottomDetailsBarcode/>
+									<BottomDetailsTicket/> :
+									<BottomDetailsBarcode/>
 							}
 						</div>
 					</div>
