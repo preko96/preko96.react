@@ -17,8 +17,14 @@ const doubleTap = callback => {
 	}
 }
 
-export const doubleTapDynamic = callback => {
-	const callbackIsExist = callbacks.find(c=>c.instance == callback)
+export const doubleTapDynamic = (callback, name) => {
+	const callbackIsExist = callbacks.find(c=>{
+		if(name)
+			return c.name === name
+		else
+			return c.instance === callback
+	})
+	console.warn(callbackIsExist)
 	if(callbackIsExist) {
 		const currentPress = new Date().getTime()
 		const delta = currentPress - callbackIsExist.time
@@ -30,7 +36,8 @@ export const doubleTapDynamic = callback => {
 	} else {
 		callbacks.push({
 			instance: callback,
-			time: new Date().getTime()
+			time: new Date().getTime(),
+			name: name
 		})
 	}
 }

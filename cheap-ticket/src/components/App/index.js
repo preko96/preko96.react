@@ -21,6 +21,7 @@ const initTo = localStorage.getItem('to') ?
 class App extends React.Component {
 
 	state = {
+		editing: false,
 		from: initFrom,
 		to: initTo,
 		activeTab: 'ticket',
@@ -29,6 +30,12 @@ class App extends React.Component {
 
 	changeTab = tab => this.setState({activeTab: tab})
 	flipGoingTowards = () => this.setState(state=>({ direction: !state.direction }))
+	
+	onEditPlace = place => e => {
+		const value = e.target.value
+		localStorage.setItem(place, JSON.stringify(value))
+		this.setState({ [place]: value })
+	}
 
 	render() {
 		const { activeTab, from, to, direction } = this.state
@@ -40,7 +47,7 @@ class App extends React.Component {
 			<div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
 				<div>
 					<Topbar/>
-					<TopDetails from={from} to={to} direction={direction}/>
+					<TopDetails from={from} to={to} direction={direction} onEditPlace={this.onEditPlace}/>
 					<Tabs activeTab={activeTab} changeTab={this.changeTab}/>
 				</div>
 

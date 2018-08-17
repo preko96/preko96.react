@@ -53,7 +53,33 @@ const getShorterDate = () => {
 	return `${day1} ${month} ${year}`
 }
 
+const localPrice = localStorage.getItem('price')
+const initPrice = localPrice ?
+	JSON.parse(localPrice) :
+	'8.30'
+
 class Card extends React.Component {
+
+	state = { price: initPrice, editing: false }
+
+	onDisableEdit = () => this.setState({ editing: false })
+	onEnableEdit = () => this.setState({ editing: true })
+
+	onEditPrice = e => {
+		const value = e.target.value
+		localStorage.setItem('price', JSON.stringify(value))
+		this.setState({ price: value })
+	} 
+
+	renderPrice = () => {
+		const { editing, price } = this.state
+		return (
+			editing ?
+				<input onBlur={this.onDisableEdit} onChange={this.onEditPrice} defaultValue={price}/> :
+				<div onClick={()=>doubleTapDynamic(this.onEnableEdit)} style={style.element(6)}>Price: £{price}</div>
+		)
+	}
+
 	render() {
 		const { direction, flipGoingTowards, from, to } = this.props
 		return(
@@ -61,7 +87,7 @@ class Card extends React.Component {
 					<div style={style.header}>{getHeaderText()}</div>
 					<section>
 						<div style={{...style.element(0), ...{padding: '2px 5px'}}}><Checker/></div>
-						<div style={style.element(1)}>Anytime Day Return ({direction ? 'Return' : 'Outward'})</div>
+						<div style={style.element(1)}>Anytime Day Return ({direction ? 'Outward' : 'Return'})</div>
 						<div style={style.element(2)}>Adult Standard Class</div>
 						<div style={style.element(3)}>
 							<div style={{marginBottom: '10px'}}>{direction ? from : to }</div>
@@ -72,7 +98,7 @@ class Card extends React.Component {
 						</div>
 						<div style={style.element(4)}>Valid via any permitted route</div>
 						<div style={style.element(5)}>Travel on:<br/>{getShorterDate()}</div>
-						<div style={style.element(6)}>Price: £8.30</div>
+						{ this.renderPrice() }
 					</section>
 					<div style={{
 						height: 25,
